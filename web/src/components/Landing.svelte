@@ -40,6 +40,7 @@
 </script>
 
 <div>
+    <p>Recommand use Steam built-in screenshot feature (output without app bar)</p>
     <label
         class="upload-drop-zone"
         class:upload-drop-zone--dragging={isDraggingFile}

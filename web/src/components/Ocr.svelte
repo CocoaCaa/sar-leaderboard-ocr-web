@@ -12,7 +12,7 @@
         rowWidth: 290,
         rowHeight: 30,
         startX: 589,
-        startY: 106,
+        startY: 76,
         maskStartX: 45,
         maskWidth: 190,
         scaleUp: 5,
@@ -86,6 +86,9 @@
         copyingCsvStr = papaparse.unparse(rows);
         const textArea = document.createElement('textarea');
         textArea.value = copyingCsvStr;
+        textArea.style.position = 'absolute';
+        textArea.style.left = '0';
+        textArea.style.top = '0';
         document.body.appendChild(textArea);
         textArea.focus();
         textArea.select();
@@ -118,7 +121,10 @@
         on:error={handleOcrImageLoadError}
         alt="OCR target"
     />
-    <canvas id="canvas" class="process-canvas" bind:this={canvas} />
+    <div class="ocr-process-preview">
+        <div>OCR Process</div>
+        <canvas id="canvas" class="process-canvas" bind:this={canvas} />
+    </div>
 
     <div class="results">
         <OcrResultTable rows={rows.slice(0, 32)} />
@@ -172,27 +178,21 @@
         display: none;
     }
 
-    .process-canvas {
-        display: none;
-        width: 100%;
+    .ocr-process-preview {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
     }
 
-    .process-canvas--show {
-        display: block;
+    .process-canvas {
+        width: 40%;
+        min-width: 200px;
+        margin-left: 10px;
     }
 
     .results {
         display: grid;
         grid-template-columns: auto auto;
         column-gap: 10px;
-    }
-
-    .copy-textarea {
-        width: 0.1px;
-        height: 0.1px;
-        background-color: transparent;
-        overflow: hidden;
-        opacity: 0.01;
-        pointer-events: none;
     }
 </style>
