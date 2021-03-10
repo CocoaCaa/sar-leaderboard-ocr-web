@@ -26,11 +26,13 @@
 
     body {
         font-family: 'Rubik', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+        color: #fff;
+        background-color: #282a36;
     }
 
     main {
         margin: 0 auto;
-        max-width: 1140px;
+        max-width: 960px;
     }
 
     fieldset {
