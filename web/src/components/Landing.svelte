@@ -1,6 +1,8 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
 
+    const supportedImageMimeTypes = ['image/png', 'image/jpeg'];
+
     let targetOcrFileUrl: string;
     let isDraggingFile = false;
 
@@ -18,7 +20,7 @@
 
         isDraggingFile = false;
         const [item] = ev.dataTransfer.items;
-        if (item.kind !== 'file' || item.type !== 'image/png') {
+        if (item.kind !== 'file' || !supportedImageMimeTypes.includes(item.type)) {
             alert('Only accept PNG image');
         }
         targetOcrFileUrl = URL.createObjectURL(item.getAsFile());
@@ -41,7 +43,7 @@
     <label
         class="upload-drop-zone"
         class:upload-drop-zone--dragging={isDraggingFile}
-        style="background-image: url({targetOcrFileUrl})"
+        style="background-image: url({targetOcrFileUrl ?? ''})"
         on:drop|preventDefault={handleFileDrop}
         on:dragover|preventDefault={handleDragOver}
         on:dragenter|preventDefault={handleDragOver}
@@ -51,7 +53,7 @@
         Drop a leaderboard screenshot or click here to upload
         <input class="upload-drop-zone__input" type="file" on:change={handleFileClick} />
     </label>
-    <button class="btn-start" on:click={handleSubmit} disabled={!targetOcrFileUrl}>Start</button>
+    <button type="button" class="btn-start" on:click={handleSubmit} disabled={!targetOcrFileUrl}>Start</button>
 </div>
 
 <style lang="scss">

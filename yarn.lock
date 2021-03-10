@@ -131,9 +131,11 @@ __metadata:
     "@rollup/plugin-node-resolve": ^11.2.0
     "@rollup/plugin-typescript": ^8.0.0
     "@tsconfig/svelte": ^1.0.0
+    "@types/papaparse": ^5.2.5
     "@types/tesseract.js": ^0.0.2
     autoprefixer: ^10.2.5
     normalize.css: ^8.0.1
+    papaparse: ^5.3.0
     postcss: ^8.2.8
     postcss-import: ^14.0.0
     postcss-load-config: ^3.0.1
@@ -178,6 +180,15 @@ __metadata:
   version: 14.14.33
   resolution: "@types/node@npm:14.14.33"
   checksum: f269fc728f6547345e000a0d86e1be802b475bb6759493208d7bc1cf8d49e838d3952ae54b8c7cd2ce168f9ef50c30e0d7084064a5f98db87efc833a38d955af
+  languageName: node
+  linkType: hard
+
+"@types/papaparse@npm:^5.2.5":
+  version: 5.2.5
+  resolution: "@types/papaparse@npm:5.2.5"
+  dependencies:
+    "@types/node": "*"
+  checksum: c212250add6ab83825b3ebb7afbe4df47888dd800ea2e1bf06758394efaab047beb12c50bfaf45a6066cf5ead95b250042fa92675ef1fff1c235990c8ec14d8b
   languageName: node
   linkType: hard
 
@@ -1508,6 +1519,13 @@ fsevents@~2.3.1:
   version: 2.0.2
   resolution: "opts@npm:2.0.2"
   checksum: 9f06c54f4dfa7ddccbf7c42b2e170076c5eabfacafe4249f643bda50462dabf0543405557eb619d2f09c886075c2bcaba2c2e8b5e23fcf4f899fc259e3e4397d
+  languageName: node
+  linkType: hard
+
+"papaparse@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "papaparse@npm:5.3.0"
+  checksum: 65a492e6dcfd03ea39114cdedbc3bf71be3ec16e622e94e09f6ffbba5a964bba6bd11c6aecec6a93d2f700d6f847716357266f9f6206a23ee1ee896c3f2bb2b4
   languageName: node
   linkType: hard
 
