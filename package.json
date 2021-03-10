@@ -1,0 +1,7 @@
+{
+    "name": "sar-leaderboard-ocr-web",
+    "private": true,
+    "workspaces": [
+        "web"
+    ]
+}
