@@ -31,13 +31,16 @@ export class FormatBase {
         this.threshold = params.threshold;
     }
 
+    updateCanvasSize(canvas: HTMLCanvasElement) {
+        canvas.width = this.rowWidth * this.scaleUp;
+        canvas.height = this.rowHeight * this.scaleUp;
+    }
+
     writeImage(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, img: HTMLImageElement, idx: number) {
         const yIdx = idx % 32;
         const xOffset = (idx >= 32 ? this.rowWidth + this.nextRowOffset : 0) * this.scaleUp;
         const yOffset = this.rowHeight * this.scaleUp * yIdx;
 
-        canvas.width = this.rowWidth * this.scaleUp;
-        canvas.height = this.rowHeight * this.scaleUp;
         ctx.globalCompositeOperation = 'source-over';
         ctx.drawImage(
             img,
