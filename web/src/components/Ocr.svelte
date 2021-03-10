@@ -108,7 +108,7 @@
     <div class="status">
         <div class="progress-bar">
             <div class="progress-bar__inner" data-progress={progress} style="width: {progress}%" />
-            <span class="progress-bar__progress">{progress}%</span>
+            <span class="progress-bar__progress">{progress === 0 ? 'Loading...' : `${progress}%`}</span>
         </div>
         <button type="button" on:click={handleCopyAsCsv} disabled={progress !== 100 || !!copyingCsvStr}
             >{!!copyingCsvStr ? 'Copied!' : 'Copy as CSV'}</button
