@@ -57,6 +57,13 @@
         text-decoration: underline;
     }
 
+    h2 {
+        display: inline-block;
+        padding-right: 30px;
+        border-bottom: 3px solid #fff;
+        margin-bottom: 0px;
+    }
+
     main {
         margin: 0 auto;
         max-width: 768px;

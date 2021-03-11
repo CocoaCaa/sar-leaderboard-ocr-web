@@ -73,6 +73,14 @@
             >https://github.com/minixz/sar-leaderboard-ocr-web</a
         >
     </p>
+    <h2>Accuracy</h2>
+
+    <p>
+        The output data tested could up to <strong>100%</strong> accurate in resolution
+        <i>1:1 1920x1080 size without application bar</i>
+        (and that is the <strong>screenshot requirement</strong>). But there could still have some reason to make the
+        result incorrect, recommend doubling check the data one-by-one after converted.
+    </p>
 </div>
 
 <style lang="scss">
