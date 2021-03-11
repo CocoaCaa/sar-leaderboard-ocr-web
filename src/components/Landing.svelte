@@ -41,7 +41,10 @@
 </script>
 
 <div>
-    <p>Recommand use Steam built-in screenshot feature (output without app bar), and the size require 1920x1080</p>
+    <p>
+        Recommand use Steam built-in screenshot feature (output without app bar), and the size require 1920x1080, you
+        could view the <a href="/example-input.jpg" target="_blank">example by clicking here</a>.
+    </p>
     <label
         class="upload-drop-zone"
         class:upload-drop-zone--dragging={isDraggingFile}

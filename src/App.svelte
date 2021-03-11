@@ -22,7 +22,7 @@
     {/if}
 </main>
 <footer class="page-footer">
-    <p>Develop by CocoaCaa (a.k.a minixz)</p>
+    <p>Develop by CocoaCaa (a.k.a. minixz)</p>
     <p>
         <a href="https://animalroyale.com/" target="_blank">Super Animal Royale</a>
         is copyright
