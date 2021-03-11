@@ -1,4 +1,5 @@
 <script lang="ts">
+    import GitHubCorner from './components/GitHubCorner.svelte';
     import Landing from './components/Landing.svelte';
     import Ocr from './components/Ocr.svelte';
 
@@ -11,6 +12,7 @@
     }
 </script>
 
+<GitHubCorner />
 <main>
     <h1>SAR Leaderboard OCR</h1>
     {#if isInOcrProcess}
@@ -19,6 +21,15 @@
         <Landing on:submit={handleSubmit} />
     {/if}
 </main>
+<footer class="page-footer">
+    <p>Develop by CocoaCaa (a.k.a minixz)</p>
+    <p>
+        <a href="https://animalroyale.com/" target="_blank">Super Animal Royale</a>
+        is copyright
+        <a href="https://pixilestudios.com/" target="_blank">Pixile, Inc</a>
+        and is not affiliated with this site.
+    </p>
+</footer>
 
 <style lang="scss" global>
     @import 'normalize.css';
@@ -34,6 +45,12 @@
         background-color: #282a36;
         font-size: 16px;
         overflow-y: scroll;
+        line-height: 1.5;
+    }
+
+    a {
+        color: #de5f33;
+        text-decoration: underline;
     }
 
     main {
@@ -67,6 +84,31 @@
         &:disabled {
             cursor: not-allowed;
             opacity: 0.3;
+        }
+    }
+
+    code {
+        color: #ff6565;
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 2px 7px;
+        border-radius: 5px;
+    }
+
+    .page-footer {
+        font-size: 14px;
+        color: #717386;
+        margin-top: 30px;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 768px;
+
+        p {
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        a {
+            color: #717386;
         }
     }
 </style>

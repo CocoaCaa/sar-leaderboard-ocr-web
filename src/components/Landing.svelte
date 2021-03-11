@@ -21,7 +21,8 @@
         isDraggingFile = false;
         const [item] = ev.dataTransfer.items;
         if (item.kind !== 'file' || !supportedImageMimeTypes.includes(item.type)) {
-            alert('Only accept PNG image');
+            alert('Only accept PNG or JPEG image');
+            return;
         }
         targetOcrFileUrl = URL.createObjectURL(item.getAsFile());
     }
@@ -40,7 +41,7 @@
 </script>
 
 <div>
-    <p>Recommand use Steam built-in screenshot feature (output without app bar)</p>
+    <p>Recommand use Steam built-in screenshot feature (output without app bar), and the size require 1920x1080</p>
     <label
         class="upload-drop-zone"
         class:upload-drop-zone--dragging={isDraggingFile}
@@ -55,6 +56,14 @@
         <input class="upload-drop-zone__input" type="file" on:change={handleFileClick} />
     </label>
     <button type="button" class="btn-start" on:click={handleSubmit} disabled={!targetOcrFileUrl}>Start</button>
+    <h2>How is work?</h2>
+    <p>
+        It will turn the screenshots into 64 image rows, apply a negative (inverse colour), threshold and scale up to
+        make the text more clean and black text with white background. Then masked the player name (since some name are
+        so cool, it diffcult to do OCR). And finally, it will output the rank, player in-match ID and kills. You could
+        use those data with the in-game <code>/getplayers</code> command (Only match Host could use) to match the player
+        names with those data.
+    </p>
 </div>
 
 <style lang="scss">
