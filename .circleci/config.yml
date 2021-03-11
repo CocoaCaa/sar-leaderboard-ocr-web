@@ -33,16 +33,13 @@ jobs:
             - "61:3f:cd:42:65:33:73:34:61:27:59:a6:31:7a:cd:56"
       - run:
           name: Deploy docs to gh-pages branch
-          command: gh-pages --dist public
+          command: gh-pages -m 'Auto build commit [ci skip]' --dist public
 
 workflows:
   version: 2
   build:
     jobs:
-      - docs-build:
-          filters:
-            branches:
-              only: main
+      - docs-build
       - docs-deploy:
           requires:
             - docs-build
