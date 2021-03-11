@@ -121,7 +121,7 @@
             on:click={handleCopyAsCsv}
             disabled={progress !== 100 || !!copyingCsvStr}>{!!copyingCsvStr ? 'Copied!' : 'Copy as CSV'}</button
         >
-        <button type="button" on:click={handleRestart} disabled={progress !== 100 || !!copyingCsvStr}>Restart</button>
+        <button type="button" on:click={handleRestart} disabled={progress !== 100}>Restart</button>
     </div>
     <img
         class="ocr-target"
