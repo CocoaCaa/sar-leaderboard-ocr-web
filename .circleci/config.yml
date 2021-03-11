@@ -28,6 +28,9 @@ jobs:
             npm install -g --silent gh-pages@3.1.0
             git config user.email "minikuz@gmail.com"
             git config user.name "minikuz"
+      - add_ssh_keys:
+          fingerprints:
+            - "61:3f:cd:42:65:33:73:34:61:27:59:a6:31:7a:cd:56"
       - run:
           name: Deploy docs to gh-pages branch
           command: gh-pages --dist public
