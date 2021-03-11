@@ -39,7 +39,10 @@ workflows:
   version: 2
   build:
     jobs:
-      - docs-build
+      - docs-build:
+          filters:
+            branches:
+              only: main
       - docs-deploy:
           requires:
             - docs-build
