@@ -16,7 +16,7 @@
     }
 </script>
 
-<GitHubCorner />
+<GitHubCorner href="https://github.com/minixz/sar-leaderboard-ocr-web" />
 <main>
     <h1>SAR Leaderboard OCR</h1>
     {#if isInOcrProcess}

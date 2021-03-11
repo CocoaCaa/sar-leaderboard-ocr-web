@@ -2,7 +2,7 @@
     export let href: string;
 </script>
 
-<a {href} class="github-corner" aria-label="View source on GitHub">
+<a {href} target="_blank" class="github-corner" aria-label="View source on GitHub">
     <svg
         width="80"
         height="80"

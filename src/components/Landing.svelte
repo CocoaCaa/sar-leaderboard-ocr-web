@@ -67,6 +67,12 @@
         use those data with the in-game <code>/getplayers</code> command (Only match Host could use) to match the player
         names with those data.
     </p>
+    <p>
+        And the source code is in
+        <a href="https://github.com/minixz/sar-leaderboard-ocr-web" target="_blank"
+            >https://github.com/minixz/sar-leaderboard-ocr-web</a
+        >
+    </p>
 </div>
 
 <style lang="scss">
