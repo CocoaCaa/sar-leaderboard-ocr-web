@@ -8,7 +8,7 @@ Go to https://sar-leaderboard-ocr.bananpe.win/
 
 ## How it is work?
 
-It will turn the screenshots into 64 image rows, apply a negative (inverse colour), threshold and scale up to make the text more clean and black text with white background. Then masked the player name (since some name are so cool, it diffcult to do OCR). And finally, it will output the rank, player in-match ID and kills. You could use those data with the in-game `/getplayers` command (Only match Host could use) to match the player names with those data.
+It will turn the screenshots into 64 image rows, apply a negative (inverse colour), threshold and scale up to make the text more clean and black text with white background. Then masked the player name (since some name are so cool, it diffcult to do OCR). And finally, it will output the rank, player in-match ID and kills. You could use those data with the in-game `/getplayers` command (Only match Host could use) to match the player names with those data. Every process is **no need** require server-side and run in your browser only.
 
 ## Accuracy
 

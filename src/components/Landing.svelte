@@ -65,7 +65,7 @@
         make the text more clean and black text with white background. Then masked the player name (since some name are
         so cool, it diffcult to do OCR). And finally, it will output the rank, player in-match ID and kills. You could
         use those data with the in-game <code>/getplayers</code> command (Only match Host could use) to match the player
-        names with those data.
+        names with those data. Every process is <strong>no need</strong> require server-side and run in your browser only.
     </p>
     <p>
         And the source code is in
