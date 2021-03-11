@@ -56,7 +56,7 @@
         <input class="upload-drop-zone__input" type="file" on:change={handleFileClick} />
     </label>
     <button type="button" class="btn-start" on:click={handleSubmit} disabled={!targetOcrFileUrl}>Start</button>
-    <h2>How is work?</h2>
+    <h2>How it is work?</h2>
     <p>
         It will turn the screenshots into 64 image rows, apply a negative (inverse colour), threshold and scale up to
         make the text more clean and black text with white background. Then masked the player name (since some name are
