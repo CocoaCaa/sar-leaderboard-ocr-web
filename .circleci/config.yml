@@ -1,0 +1,45 @@
+version: 2
+
+jobs:
+  docs-build:
+    docker:
+      - image: node:14.16.0
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - run:
+          name: Build public
+          command: yarn build
+      - persist_to_workspace:
+          root: .
+          paths: public
+  docs-deploy:
+    docker:
+      - image: node:8.10.0
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install and configure dependencies
+          command: |
+            npm install -g --silent gh-pages@3.1.0
+            git config user.email "minikuz@gmail.com"
+            git config user.name "minikuz"
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: gh-pages --dist public
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - docs-build
+      - docs-deploy:
+          requires:
+            - docs-build
+          filters:
+            branches:
+              only: main
