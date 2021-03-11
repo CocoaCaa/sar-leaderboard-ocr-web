@@ -1,7 +1,7 @@
 <script lang="ts">
     import OcrResultTable from './OcrResultTable.svelte';
 
-    import { onMount } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
 
     import papaparse from 'papaparse';
     import { createWorker, OEM, PSM } from 'tesseract.js';
@@ -33,6 +33,7 @@
 
     export let imageUrl: string;
 
+    const dispatch = createEventDispatcher();
     const totalRows = 64;
     let currentRow = 0;
     let progress = 0;
@@ -99,6 +100,10 @@
         }, 2000);
     }
 
+    function handleRestart() {
+        dispatch('restart');
+    }
+
     $: {
         progress = Math.round((currentRow / totalRows) * 100);
     }
@@ -110,9 +115,13 @@
             <div class="progress-bar__inner" data-progress={progress} style="width: {progress}%" />
             <span class="progress-bar__progress">{progress === 0 ? 'Loading...' : `${progress}%`}</span>
         </div>
-        <button type="button" on:click={handleCopyAsCsv} disabled={progress !== 100 || !!copyingCsvStr}
-            >{!!copyingCsvStr ? 'Copied!' : 'Copy as CSV'}</button
+        <button
+            class="btn-copy-as-csv"
+            type="button"
+            on:click={handleCopyAsCsv}
+            disabled={progress !== 100 || !!copyingCsvStr}>{!!copyingCsvStr ? 'Copied!' : 'Copy as CSV'}</button
         >
+        <button type="button" on:click={handleRestart} disabled={progress !== 100 || !!copyingCsvStr}>Restart</button>
     </div>
     <img
         class="ocr-target"
@@ -194,5 +203,24 @@
         display: grid;
         grid-template-columns: auto auto;
         column-gap: 10px;
+    }
+
+    .btn-copy-as-csv {
+        margin-right: 10px;
+        background-color: #37dea5;
+        color: #282a36;
+
+        &:active {
+            background-color: scale-color(#37dea5, $lightness: -30%);
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+        &:disabled {
+            cursor: not-allowed;
+            opacity: 0.3;
+        }
     }
 </style>

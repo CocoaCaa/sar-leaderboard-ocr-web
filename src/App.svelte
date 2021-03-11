@@ -10,13 +10,17 @@
         imageUrl = ev.detail;
         isInOcrProcess = true;
     }
+
+    function handleRestart() {
+        isInOcrProcess = false;
+    }
 </script>
 
 <GitHubCorner />
 <main>
     <h1>SAR Leaderboard OCR</h1>
     {#if isInOcrProcess}
-        <Ocr {imageUrl} />
+        <Ocr {imageUrl} on:restart={handleRestart} />
     {:else}
         <Landing on:submit={handleSubmit} />
     {/if}
