@@ -3,12 +3,14 @@
     import Landing from './components/Landing.svelte';
     import Ocr from './components/Ocr.svelte';
     import MultiOcrLanding from './components/MultiOcrLanding.svelte';
+    import type { OcrInput } from './types';
+    import MultiOcrProcessing from './components/MultiOcrProcessing.svelte';
 
     let isInOcrProcess = false;
-    let imageUrl: string;
+    let inputs: OcrInput[];
 
-    function handleSubmit(ev: CustomEvent<string>) {
-        imageUrl = ev.detail;
+    function handleSubmit(ev: CustomEvent<OcrInput[]>) {
+        inputs = ev.detail;
         isInOcrProcess = true;
     }
 
@@ -20,12 +22,11 @@
 <GitHubCorner href="https://github.com/minixz/sar-leaderboard-ocr-web" />
 <main>
     <h1>SAR Leaderboard OCR</h1>
-    <!-- {#if isInOcrProcess}
-        <Ocr {imageUrl} on:restart={handleRestart} />
+    {#if isInOcrProcess}
+        <MultiOcrProcessing {inputs} on:restart={handleRestart} />
     {:else}
-        <Landing on:submit={handleSubmit} />
-    {/if} -->
-    <MultiOcrLanding />
+        <MultiOcrLanding on:submit={handleSubmit} />
+    {/if}
 </main>
 <footer class="page-footer">
     <p>Develop by CocoaCaa (a.k.a. minixz)</p>

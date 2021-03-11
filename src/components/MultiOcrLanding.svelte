@@ -1,7 +1,10 @@
 <script lang="ts">
+    import { createEventDispatcher } from 'svelte';
+
     import type { OcrInput } from '../types';
     import MultiOcrLandingInputItem from './MultiOcrLandingInputItem.svelte';
 
+    const dispatch = createEventDispatcher();
     let inputs: OcrInput[] = [{ players: '' }];
     let isValid = false;
 
@@ -36,7 +39,9 @@
         inputs = copyInputs;
     }
 
-    function handleStartProcessing() {}
+    function handleStartProcessing() {
+        dispatch('submit', inputs);
+    }
 
     $: {
         isValid = inputs.every((input) => !!input.imageUrl && !!input.players);
