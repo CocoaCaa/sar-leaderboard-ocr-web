@@ -2,6 +2,7 @@
     import GitHubCorner from './components/GitHubCorner.svelte';
     import Landing from './components/Landing.svelte';
     import Ocr from './components/Ocr.svelte';
+    import MultiOcrLanding from './components/MultiOcrLanding.svelte';
 
     let isInOcrProcess = false;
     let imageUrl: string;
@@ -19,11 +20,12 @@
 <GitHubCorner href="https://github.com/minixz/sar-leaderboard-ocr-web" />
 <main>
     <h1>SAR Leaderboard OCR</h1>
-    {#if isInOcrProcess}
+    <!-- {#if isInOcrProcess}
         <Ocr {imageUrl} on:restart={handleRestart} />
     {:else}
         <Landing on:submit={handleSubmit} />
-    {/if}
+    {/if} -->
+    <MultiOcrLanding />
 </main>
 <footer class="page-footer">
     <p>Develop by CocoaCaa (a.k.a. minixz)</p>
@@ -95,6 +97,24 @@
         &:disabled {
             cursor: not-allowed;
             opacity: 0.3;
+        }
+
+        &.btn-success {
+            background-color: #37dea5;
+            color: #282a36;
+
+            &:active {
+                background-color: scale-color(#37dea5, $lightness: -30%);
+            }
+
+            &:focus {
+                outline: none;
+            }
+
+            &:disabled {
+                cursor: not-allowed;
+                opacity: 0.3;
+            }
         }
     }
 
