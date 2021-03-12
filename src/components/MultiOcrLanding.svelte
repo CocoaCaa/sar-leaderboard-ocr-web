@@ -55,13 +55,7 @@
     </p>
     <ul class="input-list">
         {#each inputs as input, idx}
-            <MultiOcrLandingInputItem
-                {input}
-                {idx}
-                on:image-url={(ev) => handleImageUrlChanged(ev.detail, idx)}
-                on:players={(ev) => handlePlayersChanged(ev.detail, idx)}
-                on:remove={() => handleRemoveRound(idx)}
-            />
+            <MultiOcrLandingInputItem bind:input {idx} on:remove={() => handleRemoveRound(idx)} />
         {/each}
     </ul>
     <div>

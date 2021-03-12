@@ -11,9 +11,12 @@
     let isDraggingFile = false;
 
     function handleFileClick(ev: Event) {
-        const input = ev.target as HTMLInputElement;
-        const [targetOcrFile] = input.files;
-        dispatch('image-url', URL.createObjectURL(targetOcrFile));
+        const inputElement = ev.target as HTMLInputElement;
+        const [targetOcrFile] = inputElement.files;
+        input = {
+            ...input,
+            imageUrl: URL.createObjectURL(targetOcrFile),
+        };
     }
 
     function handleFileDrop(ev: DragEvent) {
@@ -23,7 +26,10 @@
             alert('Only accept PNG or JPEG image');
             return;
         }
-        dispatch('image-url', URL.createObjectURL(item.getAsFile()));
+        input = {
+            ...input,
+            imageUrl: URL.createObjectURL(item.getAsFile()),
+        };
     }
 
     function handleDragOver(ev: Event) {
@@ -36,7 +42,10 @@
 
     function handlePlayersChanged(ev: Event) {
         const textArea = ev.target as HTMLTextAreaElement;
-        dispatch('players', textArea.value);
+        input = {
+            ...input,
+            players: textArea.value,
+        };
     }
 
     function handleRemove() {
