@@ -58,7 +58,7 @@
         on:dragleave|preventDefault={handleDragLeave}
         on:dragend|preventDefault={handleDragLeave}
     >
-        Drop or click to upload
+        Drop or click to upload leaderboard image
         <input class="upload-drop-zone__input" type="file" on:change={handleFileClick} />
     </label>
     <textarea
@@ -115,6 +115,7 @@
         justify-content: center;
         font-size: 18px;
         background-size: cover;
+        padding: 10px;
     }
 
     .upload-drop-zone__input {

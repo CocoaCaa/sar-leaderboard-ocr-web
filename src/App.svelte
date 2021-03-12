@@ -1,16 +1,13 @@
 <script lang="ts">
     import GitHubCorner from './components/GitHubCorner.svelte';
-    import Landing from './components/Landing.svelte';
-    import Ocr from './components/Ocr.svelte';
     import MultiOcrLanding from './components/MultiOcrLanding.svelte';
     import type { OcrInput } from './types';
     import MultiOcrProcessing from './components/MultiOcrProcessing.svelte';
 
     let isInOcrProcess = false;
-    let inputs: OcrInput[];
+    let inputs: OcrInput[] = [{ players: '' }];
 
-    function handleSubmit(ev: CustomEvent<OcrInput[]>) {
-        inputs = ev.detail;
+    function handleSubmit() {
         isInOcrProcess = true;
     }
 
@@ -25,7 +22,7 @@
     {#if isInOcrProcess}
         <MultiOcrProcessing {inputs} on:restart={handleRestart} />
     {:else}
-        <MultiOcrLanding on:submit={handleSubmit} />
+        <MultiOcrLanding bind:inputs on:submit={handleSubmit} />
     {/if}
 </main>
 <footer class="page-footer">
@@ -69,7 +66,8 @@
 
     main {
         margin: 0 auto;
-        max-width: 768px;
+        padding: 0 15px;
+        max-width: 960px;
     }
 
     fieldset {
@@ -132,7 +130,8 @@
         margin-top: 30px;
         margin-left: auto;
         margin-right: auto;
-        max-width: 768px;
+        max-width: 960px;
+        padding: 0 15px;
 
         p {
             margin-top: 0;
