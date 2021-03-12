@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+    import papaparse from 'papaparse';
+    import { flatten } from 'ramda';
+    import { createEventDispatcher, onMount } from 'svelte';
 
     import { createWorker, OEM, PSM } from 'tesseract.js';
     import { FormatBase } from '../format';
-    import type { GetPlayerRow, OcrInput, PlayerRawRow, PlayerRow } from '../types';
-    import papaparse from 'papaparse';
+    import type { GetPlayerRow, OcrInput } from '../types';
 
     interface OutputRound {
         rank: number | null;
@@ -27,14 +28,21 @@
         scaleUp: 8,
         threshold: 110,
     });
+    const totalRowsPerLeaderboard = 64;
+    const dispatch = createEventDispatcher();
 
     export let inputs: OcrInput[];
     let currentInput: OcrInput;
     let currentIdx = 0;
     let outputs: OutputRow[] = [];
+    let isFinished = false;
+    let isDownloadingCsv = false;
 
     let canvas: HTMLCanvasElement;
     let ctx: CanvasRenderingContext2D;
+    let currentRankIdx;
+    let progress = 0;
+    let subProgress = 0;
 
     onMount(() => {
         ctx = canvas.getContext('2d');
@@ -67,16 +75,13 @@
                 tessedit_char_whitelist: '0123456789',
             });
 
-            const totalRows = 64;
-            // const rawRows: PlayerRawRow[] = [];
-            for (let currentRankIdx = 0; currentRankIdx < totalRows; currentRankIdx++) {
+            for (currentRankIdx = 0; currentRankIdx < totalRowsPerLeaderboard; currentRankIdx++) {
                 defaultFormat.writeImage(canvas, ctx, img, currentRankIdx);
                 const {
                     data: { text },
                 } = await worker.recognize(canvas.toDataURL());
                 const [id, kills] = text.trim().split(' ');
                 const name = players.find((p) => p.pID === id)?.Player ?? 'Unknown';
-                console.log(`Processing round ${currentIdx + 1} row ${currentRankIdx}`, id, kills, name);
                 const existsRowIdx = outputs.findIndex((row) => row.name === name);
                 const row =
                     existsRowIdx === -1
@@ -92,7 +97,7 @@
                         : outputs[existsRowIdx];
 
                 row.rounds[currentIdx].rank = currentRankIdx + 1;
-                row.rounds[currentIdx].kills = kills;
+                row.rounds[currentIdx].kills = Number(kills);
                 if (existsRowIdx === -1) {
                     outputs = outputs.concat(row);
                 } else {
@@ -100,25 +105,14 @@
                     copyOutputs[existsRowIdx] = row;
                     outputs = copyOutputs;
                 }
-                // rawRows.push({
-                //     rank: currentRow + 1,
-                //     id,
-                //     kills: Number(kills),
-                // });
             }
 
-            // const rows: PlayerRow[] = rawRows.map((rawRow) => ({
-            //     ...rawRow,
-            //     name: players.find((p) => p.pID === rawRow.id)?.Player ?? 'Unknown',
-            // }));
-
-            // console.log(rows);
-
+            if (currentIdx >= inputs.length - 1) {
+                isFinished = true;
+                return;
+            }
             currentIdx += 1;
             currentInput = inputs[currentIdx];
-            if (!currentInput) {
-                console.log('Finished!');
-            }
         } finally {
             worker.terminate();
         }
@@ -126,6 +120,50 @@
 
     function handleOcrImageLoadError(err) {
         console.error(err);
+    }
+
+    function handleDownloadAsCsv() {
+        isDownloadingCsv = true;
+
+        const csvRows = outputs.map((o) => ({
+            name: o.name,
+            ...o.rounds.reduce<Record<string, number>>((acc, cur, idx) => {
+                acc[`round_${idx + 1}_rank`] = cur.rank;
+                acc[`round_${idx + 1}_kills`] = cur.kills;
+                return acc;
+            }, {}),
+            highest_rank: Math.min(...o.rounds.map((r) => r.rank)),
+            total_kills: o.rounds.map((r) => r.kills).reduce((acc, cur) => acc + cur, 0),
+        }));
+        const csvStr = papaparse.unparse(csvRows, {
+            header: true,
+            columns: [
+                'name',
+                ...flatten(inputs.map((_, idx) => [`round_${idx + 1}_rank`, `round_${idx + 1}_kills`])),
+                'highest_rank',
+                'total_kills',
+            ],
+        });
+        const element = document.createElement('a');
+        element.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(csvStr)}`);
+        element.setAttribute('download', 'sar-result.csv');
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+
+        setTimeout(() => {
+            isDownloadingCsv = false;
+        }, 2000);
+    }
+
+    function handleRestart() {
+        dispatch('restart');
+    }
+
+    $: {
+        progress = isFinished ? 100 : (currentIdx / inputs.length) * 100;
+        subProgress = (currentRankIdx / totalRowsPerLeaderboard) * 100;
     }
 </script>
 
@@ -139,38 +177,73 @@
             alt="OCR target"
         />
     {/if}
+    <div class="status">
+        <div class="progress-bar">
+            <div class="progress-bar__inner" data-progress={progress} style="width: {progress}%" />
+            <div class="progress-bar__inner-sub" style="width: {subProgress}%" />
+            <span class="progress-bar__progress">{currentIdx + 1}/{inputs.length}</span>
+        </div>
+        <button
+            class="btn-download-as-csv btn-success"
+            type="button"
+            on:click={handleDownloadAsCsv}
+            disabled={!isFinished || !!isDownloadingCsv}
+            >{!!isDownloadingCsv ? 'Downloading...' : 'Download as CSV'}</button
+        >
+        <button type="button" on:click={handleRestart} disabled={!isFinished}>Restart</button>
+    </div>
     <div class="ocr-process-preview">
         <div>OCR Process</div>
         <canvas id="canvas" class="process-canvas" bind:this={canvas} />
     </div>
-    <table>
-        <thead>
-            <tr>
-                <td>Name</td>
-                {#each inputs as input, idx}
-                    <td class:result-column--odd={idx % 2 === 1}>{`R${idx + 1} rank`}</td>
-                    <td class:result-column--odd={idx % 2 === 1}>{`R${idx + 1} kills`}</td>
-                {/each}
-            </tr>
-        </thead>
-        <tbody>
-            {#each outputs as row}
+    <div class="result-table-scroll-view">
+        <table class="result-table">
+            <thead>
                 <tr>
-                    <td>{row.name}</td>
+                    <th class="result-table__heading-name" rowspan="2">Name</th>
                     {#each inputs as input, idx}
-                        <td class:result-column--odd={idx % 2 === 1}>{row.rounds[idx].rank}</td>
-                        <td class:result-column--odd={idx % 2 === 1}>{row.rounds[idx].kills}</td>
+                        <th colspan="2" class:result-column--odd={idx % 2 === 1}>{`Round ${idx + 1}`}</th>
                     {/each}
+                    <th colspan="2" class:result-column--odd={inputs.length % 2 === 1}>Final</th>
                 </tr>
-            {/each}
-        </tbody>
-    </table>
+                <tr>
+                    {#each inputs as input, idx}
+                        <th class:result-column--odd={idx % 2 === 1}>Rank</th>
+                        <th class:result-column--odd={idx % 2 === 1}>Kills</th>
+                    {/each}
+                    <th>Highest Rank</th>
+                    <th>Total Kills</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each outputs as row}
+                    <tr>
+                        <td>{row.name}</td>
+                        {#each inputs as input, idx}
+                            <td class:result-column--odd={idx % 2 === 1}>{row.rounds[idx].rank}</td>
+                            <td class:result-column--odd={idx % 2 === 1}>{row.rounds[idx].kills}</td>
+                        {/each}
+                        <td class:result-column--odd={inputs.length % 2 === 1}
+                            >{Math.min(...row.rounds.map((r) => r.rank))}</td
+                        >
+                        <td class:result-column--odd={inputs.length % 2 === 1}
+                            >{row.rounds.map((r) => r.kills).reduce((acc, cur) => acc + cur, 0)}</td
+                        >
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <style lang="scss">
     .status {
         display: flex;
         margin-bottom: 10px;
+    }
+
+    .btn-download-as-csv {
+        margin-right: 10px;
     }
 
     .progress-bar {
@@ -198,14 +271,20 @@
         }
     }
 
+    .progress-bar__inner-sub {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 3px;
+        background-color: #f0ec00;
+        transition: 200ms linear;
+    }
+
     .progress-bar__progress {
         position: relative;
         font-weight: bold;
-        background-color: #282a36;
-        padding: 5px 10px;
         border-radius: 100px;
         line-height: 1;
-        width: 65px;
         text-align: center;
     }
 
@@ -225,10 +304,30 @@
         margin-left: 10px;
     }
 
-    .results {
-        display: grid;
-        grid-template-columns: auto auto;
-        column-gap: 10px;
+    .result-table-scroll-view {
+        overflow-x: auto;
+    }
+
+    .result-table {
+        min-width: 100%;
+        border-collapse: collapse;
+
+        th,
+        td {
+            padding: 5px 10px;
+        }
+
+        th {
+            white-space: nowrap;
+            text-align: left;
+            color: #fff;
+            background-color: #de5f33;
+
+            &.result-column--odd,
+            &.result-table__heading-name {
+                background-color: scale-color(#de5f33, $lightness: -20%);
+            }
+        }
     }
 
     .result-column--odd {

@@ -173,6 +173,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/ramda@npm:^0.27.38":
+  version: 0.27.38
+  resolution: "@types/ramda@npm:0.27.38"
+  dependencies:
+    ts-toolbelt: ^6.15.1
+  checksum: ae9aea690c18803f8c582adbdcb525839177e97b7ac590a19c1327eb17ab7d2cc7c3adc63d5d6a60a9f78354017de35fa0d66a262e04ec9307d45e302d60fee2
+  languageName: node
+  linkType: hard
+
 "@types/resolve@npm:1.17.1":
   version: 1.17.1
   resolution: "@types/resolve@npm:1.17.1"
@@ -1635,6 +1644,13 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
+"ramda@npm:^0.27.1":
+  version: 0.27.1
+  resolution: "ramda@npm:0.27.1"
+  checksum: 9aa4655dffdca66f8ba2ceabebe51996d6c75f6a2fb901a150885ace22c5950c211dd589868780b7a91c1443771702634d4370e7572d8c63c60e4b4f61aa57a9
+  languageName: node
+  linkType: hard
+
 "randombytes@npm:^2.1.0":
   version: 2.1.0
   resolution: "randombytes@npm:2.1.0"
@@ -1881,6 +1897,7 @@ fsevents@~2.3.1:
     "@rollup/plugin-typescript": ^8.0.0
     "@tsconfig/svelte": ^1.0.0
     "@types/papaparse": ^5.2.5
+    "@types/ramda": ^0.27.38
     "@types/tesseract.js": ^0.0.2
     autoprefixer: ^10.2.5
     normalize.css: ^8.0.1
@@ -1888,6 +1905,7 @@ fsevents@~2.3.1:
     postcss: ^8.2.8
     postcss-import: ^14.0.0
     postcss-load-config: ^3.0.1
+    ramda: ^0.27.1
     rollup: ^2.3.4
     rollup-plugin-css-only: ^3.1.0
     rollup-plugin-livereload: ^2.0.0
@@ -2271,6 +2289,13 @@ fsevents@~2.3.1:
     psl: ^1.1.28
     punycode: ^2.1.1
   checksum: bf5d6fac5ce0bebc5876cb9b9a79d3d9ea21c9e4099f3d3e64701d6ba170a052cb88cece6737ec2473bac4f0a4f6c75d46ec17985be8587c6bbdd38d91625cb4
+  languageName: node
+  linkType: hard
+
+"ts-toolbelt@npm:^6.15.1":
+  version: 6.15.5
+  resolution: "ts-toolbelt@npm:6.15.5"
+  checksum: d2f585ee3439ae7a72dd7c00630491195b2a4f34107c595d567242482b9fa911b5a9b5921fb4984506c2f7d8efce61351c7f48519438df67b6c0a8dcd40c862c
   languageName: node
   linkType: hard
 

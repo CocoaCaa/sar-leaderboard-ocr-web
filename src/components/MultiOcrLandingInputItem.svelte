@@ -65,7 +65,7 @@
         class="input-item__players"
         bind:value={input.players}
         on:input={handlePlayersChanged}
-        placeholder="Fill-in from in-game /getplayers"
+        placeholder="Paste the content from in-game /getplayers"
     />
     <button type="button" class="input-item__remove" on:click={handleRemove}>X</button>
 </li>
