@@ -26,7 +26,7 @@
         startY: 76,
         maskStartX: 45,
         maskWidth: 190,
-        scaleUp: 3,
+        scaleUp: 3.5,
         threshold: 100,
         totalRows: 64,
     });
