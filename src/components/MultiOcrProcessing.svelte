@@ -28,13 +28,28 @@
         maskWidth: 190,
         scaleUp: 8,
         threshold: 110,
+        totalRows: 64,
     });
-    const totalRowsPerLeaderboard = 64;
+
+    const singleRowFormat = new FormatBase({
+        nextRowOffset: 150,
+        rowWidth: 290,
+        rowHeight: 30,
+        startX: 805,
+        startY: 76,
+        maskStartX: 45,
+        maskWidth: 190,
+        scaleUp: 8,
+        threshold: 110,
+        totalRows: 32,
+    });
+
     const dispatch = createEventDispatcher();
 
     export let inputs: OcrInput[];
     let currentInput: OcrInput;
     let currentIdx = 0;
+    let currentFormat: FormatBase = defaultFormat;
     let outputs: OutputRow[] = [];
     let isFinished = false;
     let isDownloadingCsv = false;
@@ -47,8 +62,9 @@
 
     onMount(() => {
         ctx = canvas.getContext('2d');
-        defaultFormat.updateCanvasSize(canvas);
         currentInput = inputs[currentIdx];
+        currentFormat = currentInput.isSingleColumn ? singleRowFormat : defaultFormat;
+        currentFormat.updateCanvasSize(canvas);
     });
 
     function getHighestRank(rounds: OutputRound[]) {
@@ -81,8 +97,8 @@
                 tessedit_char_whitelist: '0123456789',
             });
 
-            for (currentRankIdx = 0; currentRankIdx < totalRowsPerLeaderboard; currentRankIdx++) {
-                defaultFormat.writeImage(canvas, ctx, img, currentRankIdx);
+            for (currentRankIdx = 0; currentRankIdx < currentFormat.totalRows; currentRankIdx++) {
+                currentFormat.writeImage(canvas, ctx, img, currentRankIdx);
                 const {
                     data: { text },
                 } = await worker.recognize(canvas.toDataURL());
@@ -126,6 +142,7 @@
             }
             currentIdx += 1;
             currentInput = inputs[currentIdx];
+            currentFormat = currentInput.isSingleColumn ? singleRowFormat : defaultFormat;
         } finally {
             worker.terminate();
         }
@@ -176,7 +193,7 @@
 
     $: {
         progress = isFinished ? 100 : (currentIdx / inputs.length) * 100;
-        subProgress = (currentRankIdx / totalRowsPerLeaderboard) * 100;
+        subProgress = (currentRankIdx / currentFormat.totalRows) * 100;
     }
 </script>
 

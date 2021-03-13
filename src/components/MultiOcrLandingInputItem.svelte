@@ -108,6 +108,7 @@
             />
             <div class="input-item__toolbar">
                 <label><input type="checkbox" bind:checked={input.isIncludeBots} /> Include bots?</label>
+                <label><input type="checkbox" bind:checked={input.isSingleColumn} /> Single Column?</label>
             </div>
         </div>
         <button type="button" class="input-item__remove" on:click={handleRemove}>X</button>
@@ -164,6 +165,10 @@
 
     .input-item__toolbar {
         padding: 5px 10px;
+
+        > label {
+            margin-right: 10px;
+        }
     }
 
     .input-item__remove {
