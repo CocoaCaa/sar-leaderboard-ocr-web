@@ -26,8 +26,8 @@
         startY: 76,
         maskStartX: 45,
         maskWidth: 190,
-        scaleUp: 8,
-        threshold: 110,
+        scaleUp: 3.5,
+        threshold: 100,
         totalRows: 64,
     });
 
@@ -35,12 +35,12 @@
         nextRowOffset: 150,
         rowWidth: 290,
         rowHeight: 30,
-        startX: 805,
+        startX: 802,
         startY: 76,
         maskStartX: 45,
         maskWidth: 190,
-        scaleUp: 8,
-        threshold: 110,
+        scaleUp: 3,
+        threshold: 90,
         totalRows: 32,
     });
 
