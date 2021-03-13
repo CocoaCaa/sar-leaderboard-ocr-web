@@ -65,7 +65,7 @@
 
         let worker: Tesseract.Worker;
         try {
-            worker = createWorker();
+            worker = createWorker({ langPath: '/' });
             await worker.load();
             await worker.loadLanguage('eng');
             await worker.initialize('eng');
