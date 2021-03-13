@@ -51,6 +51,14 @@
         currentInput = inputs[currentIdx];
     });
 
+    function getHighestRank(rounds: OutputRound[]) {
+        return Math.min(...rounds.filter((r) => r.rank !== null).map((r) => r.rank));
+    }
+
+    function getTotalKills(rounds: OutputRound[]) {
+        return rounds.map((r) => r.kills ?? 0).reduce((acc, cur) => acc + cur, 0);
+    }
+
     async function handleOcrImageLoaded(ev: Event) {
         const img = ev.target as HTMLImageElement;
 
@@ -137,8 +145,8 @@
                 acc[`round_${idx + 1}_kills`] = cur.kills;
                 return acc;
             }, {}),
-            highest_rank: Math.min(...o.rounds.map((r) => r.rank)),
-            total_kills: o.rounds.map((r) => r.kills).reduce((acc, cur) => acc + cur, 0),
+            highest_rank: getHighestRank(o.rounds),
+            total_kills: getTotalKills(o.rounds),
         }));
         const csvStr = papaparse.unparse(csvRows, {
             header: true,
@@ -225,15 +233,11 @@
                     <tr>
                         <td>{row.name}</td>
                         {#each inputs as input, idx}
-                            <td class:result-column--odd={idx % 2 === 1}>{row.rounds[idx].rank}</td>
-                            <td class:result-column--odd={idx % 2 === 1}>{row.rounds[idx].kills}</td>
+                            <td class:result-column--odd={idx % 2 === 1}>{row.rounds[idx].rank ?? 'N / A'}</td>
+                            <td class:result-column--odd={idx % 2 === 1}>{row.rounds[idx].kills ?? 'N / A'}</td>
                         {/each}
-                        <td class:result-column--odd={inputs.length % 2 === 1}
-                            >{Math.min(...row.rounds.map((r) => r.rank))}</td
-                        >
-                        <td class:result-column--odd={inputs.length % 2 === 1}
-                            >{row.rounds.map((r) => r.kills).reduce((acc, cur) => acc + cur, 0)}</td
-                        >
+                        <td class:result-column--odd={inputs.length % 2 === 1}>{getHighestRank(row.rounds)}</td>
+                        <td class:result-column--odd={inputs.length % 2 === 1}>{getTotalKills(row.rounds)}</td>
                     </tr>
                 {/each}
             </tbody>
