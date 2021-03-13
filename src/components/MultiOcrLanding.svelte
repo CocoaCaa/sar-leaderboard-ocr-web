@@ -5,11 +5,11 @@
     import MultiOcrLandingInputItem from './MultiOcrLandingInputItem.svelte';
 
     const dispatch = createEventDispatcher();
-    export let inputs: OcrInput[];
+    export let inputs: (OcrInput & { _errors: [] })[];
     let isValid = false;
 
     function handleAddRound() {
-        inputs = inputs.concat({ players: '' });
+        inputs = inputs.concat({ players: '', _errors: [] });
     }
 
     function handleRemoveRound(idx: number) {
@@ -21,30 +21,12 @@
         inputs = copyInputs;
     }
 
-    function handleImageUrlChanged(imageUrl: string, idx: number) {
-        const copyInputs = [...inputs];
-        copyInputs[idx] = {
-            ...copyInputs[idx],
-            imageUrl,
-        };
-        inputs = copyInputs;
-    }
-
-    function handlePlayersChanged(players: string, idx: number) {
-        const copyInputs = [...inputs];
-        copyInputs[idx] = {
-            ...copyInputs[idx],
-            players,
-        };
-        inputs = copyInputs;
-    }
-
     function handleStartProcessing() {
         dispatch('submit');
     }
 
     $: {
-        isValid = inputs.every((input) => !!input.imageUrl && !!input.players);
+        isValid = inputs.every((input) => !!input.imageUrl && !!input.players && input._errors.length === 0);
     }
 </script>
 
