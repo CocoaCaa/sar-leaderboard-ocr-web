@@ -9,7 +9,7 @@
     let isValid = false;
 
     function handleAddRound() {
-        inputs = inputs.concat({ players: '', _errors: [] });
+        inputs = inputs.concat({ players: '', includeBots: false, _errors: [] });
     }
 
     function handleRemoveRound(idx: number) {

@@ -79,7 +79,14 @@
                     data: { text },
                 } = await worker.recognize(canvas.toDataURL());
                 const [id, kills] = text.trim().split(' ');
-                const name = players.find((p) => p.pID === id)?.Player ?? 'Unknown';
+                const playerRow = players.find((p) => p.pID === id);
+                if (!playerRow) {
+                    continue;
+                }
+                if (!playerRow.PlayfabID && !currentInput.includeBots) {
+                    continue;
+                }
+                const name = playerRow.Player ?? 'Unknown';
                 const existsRowIdx = outputs.findIndex((row) => row.name === name);
                 const row =
                     existsRowIdx === -1
