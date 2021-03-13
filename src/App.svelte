@@ -1,13 +1,13 @@
 <script lang="ts">
     import GitHubCorner from './components/GitHubCorner.svelte';
-    import Landing from './components/Landing.svelte';
-    import Ocr from './components/Ocr.svelte';
+    import MultiOcrLanding from './components/MultiOcrLanding.svelte';
+    import type { OcrInput } from './types';
+    import MultiOcrProcessing from './components/MultiOcrProcessing.svelte';
 
     let isInOcrProcess = false;
-    let imageUrl: string;
+    let inputs: OcrInput[] = [{ players: '' }];
 
-    function handleSubmit(ev: CustomEvent<string>) {
-        imageUrl = ev.detail;
+    function handleSubmit() {
         isInOcrProcess = true;
     }
 
@@ -20,9 +20,9 @@
 <main>
     <h1>SAR Leaderboard OCR</h1>
     {#if isInOcrProcess}
-        <Ocr {imageUrl} on:restart={handleRestart} />
+        <MultiOcrProcessing {inputs} on:restart={handleRestart} />
     {:else}
-        <Landing on:submit={handleSubmit} />
+        <MultiOcrLanding bind:inputs on:submit={handleSubmit} />
     {/if}
 </main>
 <footer class="page-footer">
@@ -66,7 +66,8 @@
 
     main {
         margin: 0 auto;
-        max-width: 768px;
+        padding: 0 15px;
+        max-width: 960px;
     }
 
     fieldset {
@@ -96,6 +97,24 @@
             cursor: not-allowed;
             opacity: 0.3;
         }
+
+        &.btn-success {
+            background-color: #37dea5;
+            color: #282a36;
+
+            &:active {
+                background-color: scale-color(#37dea5, $lightness: -30%);
+            }
+
+            &:focus {
+                outline: none;
+            }
+
+            &:disabled {
+                cursor: not-allowed;
+                opacity: 0.3;
+            }
+        }
     }
 
     code {
@@ -111,7 +130,8 @@
         margin-top: 30px;
         margin-left: auto;
         margin-right: auto;
-        max-width: 768px;
+        max-width: 960px;
+        padding: 0 15px;
 
         p {
             margin-top: 0;
