@@ -1,7 +1,7 @@
 export interface OcrInput {
     imageUrl?: string;
     players: string;
-    includeBots: boolean;
+    isIncludeBots: boolean;
 }
 export interface GetPlayerRow {
     pID: string;

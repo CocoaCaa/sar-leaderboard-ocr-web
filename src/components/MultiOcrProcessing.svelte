@@ -91,7 +91,7 @@
                 if (!playerRow) {
                     continue;
                 }
-                if (!playerRow.PlayfabID && !currentInput.includeBots) {
+                if (!playerRow.PlayfabID && !currentInput.isIncludeBots) {
                     continue;
                 }
                 const name = playerRow.Player ?? 'Unknown';

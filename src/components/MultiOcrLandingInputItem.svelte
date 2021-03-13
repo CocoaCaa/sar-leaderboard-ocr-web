@@ -1,5 +1,4 @@
 <script lang="ts">
-    import papaparse from 'papaparse';
     import { createEventDispatcher } from 'svelte';
     import { Csv } from '../csv';
 
@@ -108,7 +107,7 @@
                 placeholder="Paste the content from in-game /getplayers"
             />
             <div class="input-item__toolbar">
-                <label><input type="checkbox" /> Include bots?</label>
+                <label><input type="checkbox" bind:checked={input.isIncludeBots} /> Include bots?</label>
             </div>
         </div>
         <button type="button" class="input-item__remove" on:click={handleRemove}>X</button>
