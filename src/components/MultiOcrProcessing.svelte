@@ -54,7 +54,7 @@
         const img = ev.target as HTMLImageElement;
 
         const playersPauseResult = papaparse.parse<GetPlayerRow>(currentInput.players, {
-            delimiter: '    ',
+            delimiter: '	',
             header: true,
         });
         if (playersPauseResult.errors.length > 0) {
