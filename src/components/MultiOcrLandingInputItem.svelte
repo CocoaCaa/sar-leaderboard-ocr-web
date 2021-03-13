@@ -1,6 +1,7 @@
 <script lang="ts">
     import papaparse from 'papaparse';
     import { createEventDispatcher } from 'svelte';
+    import { Csv } from '../csv';
 
     import type { OcrInput } from '../types';
 
@@ -52,16 +53,14 @@
         };
 
         if (input.players) {
-            const parsePlayers = papaparse.parse<any>(input.players, {
-                delimiter: '	',
-                header: true,
-            });
+            const parsePlayers = Csv.parsePlayers(input.players);
             console.log(parsePlayers);
             if (
                 parsePlayers.data.length === 0 ||
                 parsePlayers.errors.length > 0 ||
                 !parsePlayers.data[0].pID ||
-                !parsePlayers.data[0].Player
+                !parsePlayers.data[0].Player ||
+                !parsePlayers.data[0].PlayfabID
             ) {
                 input = {
                     ...input,

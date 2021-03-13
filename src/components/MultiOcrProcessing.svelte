@@ -4,6 +4,7 @@
     import { createEventDispatcher, onMount } from 'svelte';
 
     import { createWorker, OEM, PSM } from 'tesseract.js';
+    import { Csv } from '../csv';
     import { FormatBase } from '../format';
     import type { GetPlayerRow, OcrInput } from '../types';
 
@@ -53,10 +54,7 @@
     async function handleOcrImageLoaded(ev: Event) {
         const img = ev.target as HTMLImageElement;
 
-        const playersPauseResult = papaparse.parse<GetPlayerRow>(currentInput.players, {
-            delimiter: '	',
-            header: true,
-        });
+        const playersPauseResult = Csv.parsePlayers(currentInput.players);
         if (playersPauseResult.errors.length > 0) {
             console.error(playersPauseResult.errors);
             return;
