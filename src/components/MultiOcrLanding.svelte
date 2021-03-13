@@ -5,11 +5,11 @@
     import MultiOcrLandingInputItem from './MultiOcrLandingInputItem.svelte';
 
     const dispatch = createEventDispatcher();
-    export let inputs: (OcrInput & { _errors: [] })[];
+    export let inputs: OcrInput[];
     let isValid = false;
 
     function handleAddRound() {
-        inputs = inputs.concat({ players: '', _errors: [] });
+        inputs = inputs.concat({ players: '', isIncludeBots: false, isSingleColumn: false, _errors: [] });
     }
 
     function handleRemoveRound(idx: number) {

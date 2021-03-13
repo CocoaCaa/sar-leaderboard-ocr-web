@@ -8,6 +8,11 @@ export class FormatBase {
     private maskWidth: number;
     private scaleUp: number;
     private threshold: number;
+    private _totalRows: number;
+
+    public get totalRows() {
+        return this._totalRows;
+    }
 
     constructor(params: {
         nextRowOffset: number;
@@ -19,6 +24,7 @@ export class FormatBase {
         maskWidth: number;
         scaleUp: number;
         threshold: number;
+        totalRows: number;
     }) {
         this.nextRowOffset = params.nextRowOffset;
         this.rowWidth = params.rowWidth;
@@ -29,6 +35,7 @@ export class FormatBase {
         this.maskWidth = params.maskWidth;
         this.scaleUp = params.scaleUp;
         this.threshold = params.threshold;
+        this._totalRows = params.totalRows;
     }
 
     updateCanvasSize(canvas: HTMLCanvasElement) {

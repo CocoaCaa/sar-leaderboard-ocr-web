@@ -5,7 +5,7 @@
     import MultiOcrProcessing from './components/MultiOcrProcessing.svelte';
 
     let isInOcrProcess = false;
-    let inputs: OcrInput[] = [{ players: '' }];
+    let inputs: OcrInput[] = [{ players: '', isIncludeBots: false, isSingleColumn: false, _errors: [] }];
 
     function handleSubmit() {
         isInOcrProcess = true;

@@ -1,6 +1,6 @@
 <script lang="ts">
-    import papaparse from 'papaparse';
     import { createEventDispatcher } from 'svelte';
+    import { Csv } from '../csv';
 
     import type { OcrInput } from '../types';
 
@@ -8,7 +8,7 @@
     const dispatch = createEventDispatcher();
 
     export let idx: number;
-    export let input: OcrInput & { _errors: string[] };
+    export let input: OcrInput;
     let isDraggingFile = false;
 
     function handleFileClick(ev: Event) {
@@ -52,16 +52,14 @@
         };
 
         if (input.players) {
-            const parsePlayers = papaparse.parse<any>(input.players, {
-                delimiter: '	',
-                header: true,
-            });
+            const parsePlayers = Csv.parsePlayers(input.players);
             console.log(parsePlayers);
             if (
                 parsePlayers.data.length === 0 ||
                 parsePlayers.errors.length > 0 ||
                 !parsePlayers.data[0].pID ||
-                !parsePlayers.data[0].Player
+                !parsePlayers.data[0].Player ||
+                !parsePlayers.data[0].PlayfabID
             ) {
                 input = {
                     ...input,
@@ -102,11 +100,17 @@
             Drop or click to upload leaderboard image
             <input class="upload-drop-zone__input" type="file" on:change={handleFileClick} />
         </label>
-        <textarea
-            class="input-item__players"
-            bind:value={input.players}
-            placeholder="Paste the content from in-game /getplayers"
-        />
+        <div class="input-item__settings">
+            <textarea
+                class="input-item__players"
+                bind:value={input.players}
+                placeholder="Paste the content from in-game /getplayers"
+            />
+            <div class="input-item__toolbar">
+                <label><input type="checkbox" bind:checked={input.isIncludeBots} /> Include bots?</label>
+                <label><input type="checkbox" bind:checked={input.isSingleColumn} /> Single Column?</label>
+            </div>
+        </div>
         <button type="button" class="input-item__remove" on:click={handleRemove}>X</button>
     </div>
     {#if input._errors.length > 0}
@@ -142,6 +146,12 @@
         background-color: rgba(255, 255, 255, 0.1);
     }
 
+    .input-item__settings {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
     .input-item__players {
         flex: 1;
         padding: 5px 10px;
@@ -150,6 +160,14 @@
 
         &:focus {
             outline: none;
+        }
+    }
+
+    .input-item__toolbar {
+        padding: 5px 10px;
+
+        > label {
+            margin-right: 10px;
         }
     }
 

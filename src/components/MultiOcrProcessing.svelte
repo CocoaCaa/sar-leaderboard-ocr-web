@@ -4,6 +4,7 @@
     import { createEventDispatcher, onMount } from 'svelte';
 
     import { createWorker, OEM, PSM } from 'tesseract.js';
+    import { Csv } from '../csv';
     import { FormatBase } from '../format';
     import type { GetPlayerRow, OcrInput } from '../types';
 
@@ -27,13 +28,28 @@
         maskWidth: 190,
         scaleUp: 8,
         threshold: 110,
+        totalRows: 64,
     });
-    const totalRowsPerLeaderboard = 64;
+
+    const singleRowFormat = new FormatBase({
+        nextRowOffset: 150,
+        rowWidth: 290,
+        rowHeight: 30,
+        startX: 805,
+        startY: 76,
+        maskStartX: 45,
+        maskWidth: 190,
+        scaleUp: 8,
+        threshold: 110,
+        totalRows: 32,
+    });
+
     const dispatch = createEventDispatcher();
 
     export let inputs: OcrInput[];
     let currentInput: OcrInput;
     let currentIdx = 0;
+    let currentFormat: FormatBase = defaultFormat;
     let outputs: OutputRow[] = [];
     let isFinished = false;
     let isDownloadingCsv = false;
@@ -46,17 +62,23 @@
 
     onMount(() => {
         ctx = canvas.getContext('2d');
-        defaultFormat.updateCanvasSize(canvas);
         currentInput = inputs[currentIdx];
+        currentFormat = currentInput.isSingleColumn ? singleRowFormat : defaultFormat;
+        currentFormat.updateCanvasSize(canvas);
     });
+
+    function getHighestRank(rounds: OutputRound[]) {
+        return Math.min(...rounds.filter((r) => r.rank !== null).map((r) => r.rank));
+    }
+
+    function getTotalKills(rounds: OutputRound[]) {
+        return rounds.map((r) => r.kills ?? 0).reduce((acc, cur) => acc + cur, 0);
+    }
 
     async function handleOcrImageLoaded(ev: Event) {
         const img = ev.target as HTMLImageElement;
 
-        const playersPauseResult = papaparse.parse<GetPlayerRow>(currentInput.players, {
-            delimiter: '	',
-            header: true,
-        });
+        const playersPauseResult = Csv.parsePlayers(currentInput.players);
         if (playersPauseResult.errors.length > 0) {
             console.error(playersPauseResult.errors);
             return;
@@ -75,13 +97,20 @@
                 tessedit_char_whitelist: '0123456789',
             });
 
-            for (currentRankIdx = 0; currentRankIdx < totalRowsPerLeaderboard; currentRankIdx++) {
-                defaultFormat.writeImage(canvas, ctx, img, currentRankIdx);
+            for (currentRankIdx = 0; currentRankIdx < currentFormat.totalRows; currentRankIdx++) {
+                currentFormat.writeImage(canvas, ctx, img, currentRankIdx);
                 const {
                     data: { text },
                 } = await worker.recognize(canvas.toDataURL());
                 const [id, kills] = text.trim().split(' ');
-                const name = players.find((p) => p.pID === id)?.Player ?? 'Unknown';
+                const playerRow = players.find((p) => p.pID === id);
+                if (!playerRow) {
+                    continue;
+                }
+                if (!playerRow.PlayfabID && !currentInput.isIncludeBots) {
+                    continue;
+                }
+                const name = playerRow.Player ?? 'Unknown';
                 const existsRowIdx = outputs.findIndex((row) => row.name === name);
                 const row =
                     existsRowIdx === -1
@@ -113,6 +142,7 @@
             }
             currentIdx += 1;
             currentInput = inputs[currentIdx];
+            currentFormat = currentInput.isSingleColumn ? singleRowFormat : defaultFormat;
         } finally {
             worker.terminate();
         }
@@ -132,8 +162,8 @@
                 acc[`round_${idx + 1}_kills`] = cur.kills;
                 return acc;
             }, {}),
-            highest_rank: Math.min(...o.rounds.map((r) => r.rank)),
-            total_kills: o.rounds.map((r) => r.kills).reduce((acc, cur) => acc + cur, 0),
+            highest_rank: getHighestRank(o.rounds),
+            total_kills: getTotalKills(o.rounds),
         }));
         const csvStr = papaparse.unparse(csvRows, {
             header: true,
@@ -163,7 +193,7 @@
 
     $: {
         progress = isFinished ? 100 : (currentIdx / inputs.length) * 100;
-        subProgress = (currentRankIdx / totalRowsPerLeaderboard) * 100;
+        subProgress = (currentRankIdx / currentFormat.totalRows) * 100;
     }
 </script>
 
@@ -220,15 +250,11 @@
                     <tr>
                         <td>{row.name}</td>
                         {#each inputs as input, idx}
-                            <td class:result-column--odd={idx % 2 === 1}>{row.rounds[idx].rank}</td>
-                            <td class:result-column--odd={idx % 2 === 1}>{row.rounds[idx].kills}</td>
+                            <td class:result-column--odd={idx % 2 === 1}>{row.rounds[idx].rank ?? 'N / A'}</td>
+                            <td class:result-column--odd={idx % 2 === 1}>{row.rounds[idx].kills ?? 'N / A'}</td>
                         {/each}
-                        <td class:result-column--odd={inputs.length % 2 === 1}
-                            >{Math.min(...row.rounds.map((r) => r.rank))}</td
-                        >
-                        <td class:result-column--odd={inputs.length % 2 === 1}
-                            >{row.rounds.map((r) => r.kills).reduce((acc, cur) => acc + cur, 0)}</td
-                        >
+                        <td class:result-column--odd={inputs.length % 2 === 1}>{getHighestRank(row.rounds)}</td>
+                        <td class:result-column--odd={inputs.length % 2 === 1}>{getTotalKills(row.rounds)}</td>
                     </tr>
                 {/each}
             </tbody>
