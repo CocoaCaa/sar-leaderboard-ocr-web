@@ -8,7 +8,7 @@
     const dispatch = createEventDispatcher();
 
     export let idx: number;
-    export let input: OcrInput & { _errors: string[] };
+    export let input: OcrInput;
     let isDraggingFile = false;
 
     function handleFileClick(ev: Event) {

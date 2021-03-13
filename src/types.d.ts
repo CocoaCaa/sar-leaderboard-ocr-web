@@ -3,6 +3,7 @@ export interface OcrInput {
     players: string;
     isIncludeBots: boolean;
     isSingleColumn: boolean;
+    _errors: string[];
 }
 export interface GetPlayerRow {
     pID: string;
