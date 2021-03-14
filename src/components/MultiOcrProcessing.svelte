@@ -157,6 +157,7 @@
             currentIdx += 1;
             currentInput = inputs[currentIdx];
             currentFormat = currentInput.isSingleColumn ? singleRowFormat : defaultFormat;
+            currentFormat.updateCanvasSize(canvas);
         } finally {
             worker.terminate();
         }
