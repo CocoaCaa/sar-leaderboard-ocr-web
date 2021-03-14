@@ -374,10 +374,10 @@
         th,
         td {
             padding: 5px 10px;
+            white-space: nowrap;
         }
 
         th {
-            white-space: nowrap;
             text-align: left;
             color: #fff;
             background-color: #de5f33;
