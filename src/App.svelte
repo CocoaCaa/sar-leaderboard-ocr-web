@@ -6,6 +6,7 @@
 
     let isInOcrProcess = false;
     let inputs: OcrInput[] = [{ players: '', isIncludeBots: false, isSingleColumn: false, _errors: [] }];
+    let compareOutput: string | null = null;
 
     function handleSubmit() {
         isInOcrProcess = true;
@@ -20,9 +21,9 @@
 <main>
     <h1>SAR Leaderboard OCR</h1>
     {#if isInOcrProcess}
-        <MultiOcrProcessing {inputs} on:restart={handleRestart} />
+        <MultiOcrProcessing {inputs} {compareOutput} on:restart={handleRestart} />
     {:else}
-        <MultiOcrLanding bind:inputs on:submit={handleSubmit} />
+        <MultiOcrLanding bind:inputs bind:compareOutput on:submit={handleSubmit} />
     {/if}
 </main>
 <footer class="page-footer">

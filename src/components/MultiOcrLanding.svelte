@@ -5,8 +5,16 @@
     import MultiOcrLandingInputItem from './MultiOcrLandingInputItem.svelte';
 
     const dispatch = createEventDispatcher();
+    const { isProd } = __process.env;
     export let inputs: OcrInput[];
+    export let compareOutput: string | null;
     let isValid = false;
+
+    async function handleUploadCompareOutput(ev: Event) {
+        const element = ev.target as HTMLInputElement;
+        const [file] = element.files;
+        compareOutput = await file.text();
+    }
 
     function handleAddRound() {
         inputs = inputs.concat({ players: '', isIncludeBots: false, isSingleColumn: false, _errors: [] });
@@ -40,6 +48,9 @@
             <MultiOcrLandingInputItem bind:input {idx} on:remove={() => handleRemoveRound(idx)} />
         {/each}
     </ul>
+    {#if !isProd}
+        <label>Compare output (debug)<input type="file" on:change={handleUploadCompareOutput} /></label>
+    {/if}
     <div>
         <button type="button" on:click={handleAddRound} disabled={!isValid}>Add more rounds</button>
         <button class="btn-success" type="button" on:click={handleStartProcessing} disabled={!isValid}
