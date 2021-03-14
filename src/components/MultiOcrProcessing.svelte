@@ -33,7 +33,7 @@
         maskStartX: 45,
         maskWidth: 190,
         scaleUp: 3.5,
-        threshold: 100,
+        threshold: 101,
         totalRows: 64,
     });
 
@@ -41,7 +41,7 @@
         nextRowOffset: 150,
         rowWidth: 290,
         rowHeight: 30,
-        startX: 802,
+        startX: 805,
         startY: 76,
         maskStartX: 45,
         maskWidth: 190,
