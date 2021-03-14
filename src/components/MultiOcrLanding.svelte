@@ -6,7 +6,14 @@
 
     const dispatch = createEventDispatcher();
     export let inputs: OcrInput[];
+    export let compareOutput: string | null;
     let isValid = false;
+
+    async function handleUploadCompareOutput(ev: Event) {
+        const element = ev.target as HTMLInputElement;
+        const [file] = element.files;
+        compareOutput = await file.text();
+    }
 
     function handleAddRound() {
         inputs = inputs.concat({ players: '', isIncludeBots: false, isSingleColumn: false, _errors: [] });
@@ -40,6 +47,7 @@
             <MultiOcrLandingInputItem bind:input {idx} on:remove={() => handleRemoveRound(idx)} />
         {/each}
     </ul>
+    <label>Compare output (debug)<input type="file" on:change={handleUploadCompareOutput} /></label>
     <div>
         <button type="button" on:click={handleAddRound} disabled={!isValid}>Add more rounds</button>
         <button class="btn-success" type="button" on:click={handleStartProcessing} disabled={!isValid}

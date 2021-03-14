@@ -1,6 +1,6 @@
 <script lang="ts">
     import papaparse from 'papaparse';
-    import { flatten } from 'ramda';
+    import { flatten, type } from 'ramda';
     import { createEventDispatcher, onMount } from 'svelte';
 
     import { createWorker, OEM, PSM } from 'tesseract.js';
@@ -17,6 +17,12 @@
         name: string;
         rounds: OutputRound[];
     }
+
+    type CompareOutputRow = Record<string, string> & {
+        name: string;
+        highest_rank: string;
+        total_kills: string;
+    };
 
     const defaultFormat = new FormatBase({
         nextRowOffset: 150,
@@ -47,12 +53,15 @@
     const dispatch = createEventDispatcher();
 
     export let inputs: OcrInput[];
+    export let compareOutput: string | null;
     let currentInput: OcrInput;
     let currentIdx = 0;
     let currentFormat: FormatBase = defaultFormat;
     let outputs: OutputRow[] = [];
     let isFinished = false;
     let isDownloadingCsv = false;
+
+    let compareOutputArray: CompareOutputRow[];
 
     let canvas: HTMLCanvasElement;
     let ctx: CanvasRenderingContext2D;
@@ -65,6 +74,11 @@
         currentInput = inputs[currentIdx];
         currentFormat = currentInput.isSingleColumn ? singleRowFormat : defaultFormat;
         currentFormat.updateCanvasSize(canvas);
+
+        if (compareOutput) {
+            const result = papaparse.parse<CompareOutputRow>(compareOutput, { header: true });
+            compareOutputArray = result.data;
+        }
     });
 
     function getHighestRank(rounds: OutputRound[]) {
@@ -191,6 +205,16 @@
         dispatch('restart');
     }
 
+    function isInvalidCompareOutputValue(row: OutputRow, roundIdx: number, field: keyof OutputRound) {
+        if (!compareOutput) {
+            return false;
+        }
+        return (
+            `${row.rounds[roundIdx][field] ?? ''}` !==
+            compareOutputArray.find((c) => c.name === row.name)[`round_${roundIdx + 1}_${field}`]
+        );
+    }
+
     $: {
         progress = isFinished ? 100 : (currentIdx / inputs.length) * 100;
         subProgress = (currentRankIdx / currentFormat.totalRows) * 100;
@@ -250,8 +274,16 @@
                     <tr>
                         <td>{row.name}</td>
                         {#each inputs as input, idx}
-                            <td class:result-column--odd={idx % 2 === 1}>{row.rounds[idx].rank ?? 'N / A'}</td>
-                            <td class:result-column--odd={idx % 2 === 1}>{row.rounds[idx].kills ?? 'N / A'}</td>
+                            <td
+                                class:result-column--odd={idx % 2 === 1}
+                                class:result-column--compare-invalid={isInvalidCompareOutputValue(row, idx, 'rank')}
+                                >{row.rounds[idx].rank ?? 'N / A'}</td
+                            >
+                            <td
+                                class:result-column--odd={idx % 2 === 1}
+                                class:result-column--compare-invalid={isInvalidCompareOutputValue(row, idx, 'kills')}
+                                >{row.rounds[idx].kills ?? 'N / A'}</td
+                            >
                         {/each}
                         <td class:result-column--odd={inputs.length % 2 === 1}>{getHighestRank(row.rounds)}</td>
                         <td class:result-column--odd={inputs.length % 2 === 1}>{getTotalKills(row.rounds)}</td>
@@ -358,5 +390,10 @@
 
     .result-column--odd {
         background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .result-column--compare-invalid {
+        color: #ff3737;
+        font-weight: bold;
     }
 </style>
