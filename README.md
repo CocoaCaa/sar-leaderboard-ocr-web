@@ -1,19 +1,19 @@
 # sar-leaderboard-ocr-web
 
-> Use OCR convert Super Animal Royale private match screenshot to number data
+> Uses OCR to convert Super Animal Royale private match screenshot to numeric data
 
 ## Usage
 
 Go to https://sar-leaderboard-ocr.bananpe.win/
 
-## How it is work?
+## How does it work?
 
-It will turn the screenshots into 64 image rows, apply a negative (inverse colour), threshold and scale up to make the text more clean and black text with white background. Then masked the player name (since some name are so cool, it diffcult to do OCR). And finally, it will output the rank, player in-match ID and kills. You could use those data with the in-game `/getplayers` command (Only match Host could use) to match the player names with those data. Every process is **no need** require server-side and run in your browser only.
+It turns screenshots into 64 image rows, applies a negative (inverse colour), a threshold and a scale up to make the text cleaner and adds a white background to text in black. It then masks the player's name (since some names are so cool, it is diffcult to run OCR). Finally, it will output the ranking, player's in-match ID and kills. You could use those data by the in-game command `/getplayers` (Only available to Match Host) to match player names with the data. Server-side process **is not** required, it runs on your browser only.
 
 ## Accuracy
 
-The output data tested could up to **100%** accurate in resolution _1:1 1920x1080 size without application bar_ (and that is the **screenshot requirement**). But there could still have some reason to make the result incorrect, recommend doubling check the data one-by-one after converted.
+The output data is tested to **100%** accuracy in resolution _1:1 1920x1080 size without application bar_ (which is the **screenshot requirement**). However, there could still be some factors for potentional inaccuracy, double checking the data after conversion is recommended.
 
 ## Disclaimer
 
-[Super Animal Royale](https://animalroyale.com/) is copyright [Pixile](https://pixilestudios.com/), Inc and is not affiliated with this project and site.
+[Super Animal Royale](https://animalroyale.com/) is copyrighted by [Pixile](https://pixilestudios.com/), Inc and has no affiliation with this project and site.
