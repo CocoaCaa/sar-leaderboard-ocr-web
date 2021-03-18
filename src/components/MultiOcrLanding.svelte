@@ -40,8 +40,8 @@
 
 <div>
     <p>
-        Recommand use Steam built-in screenshot feature (output without app bar), and the size require 1920x1080, you
-        could view the <a href="/example-input.jpg" target="_blank">example by clicking here</a>.
+        Using Steam's built-in screenshot feature (output without app bar) is recommended. Image size required is 1920x1080.
+        <a href="/example-input.jpg" target="_blank">Example</a>.
     </p>
     <ul class="input-list">
         {#each inputs as input, idx}
@@ -59,14 +59,10 @@
     </div>
     <h2>How it is work?</h2>
     <p>
-        It will turn the screenshots into 64 image rows, apply a negative (inverse colour), threshold and scale up to
-        make the text more clean and black text with white background. Then masked the player name (since some name are
-        so cool, it diffcult to do OCR). And finally, it will output the rank, player in-match ID and kills. You could
-        use those data with the in-game <code>/getplayers</code> command (Only match Host could use) to match the player
-        names with those data. Every process is <strong>no need</strong> require server-side and run in your browser only.
+       It turns screenshots into 64 image rows, applies a negative (inverse colour), a threshold and a scale up to make the text cleaner and adds a white background to text in black. It then masks the player's name (since some names are so cool, it is diffcult to run OCR). Finally, it will output the ranking, player's in-match ID and kills. You could use those data by the in-game command /getplayers (Only available to Match Host) to match player names with the data. Server-side process is not required, it runs on your browser only.
     </p>
     <p>
-        And the source code is in
+        Source code is in
         <a href="https://github.com/minixz/sar-leaderboard-ocr-web" target="_blank"
             >https://github.com/minixz/sar-leaderboard-ocr-web</a
         >
@@ -74,10 +70,7 @@
     <h2>Accuracy</h2>
 
     <p>
-        The output data tested could up to <strong>100%</strong> accurate in resolution
-        <i>1:1 1920x1080 size without application bar</i>
-        (and that is the <strong>screenshot requirement</strong>). But there could still have some reason to make the
-        result incorrect, recommend doubling check the data one-by-one after converted.
+        The output data is tested to 100% accuracy in resolution 1:1 1920x1080 size without application bar (which is the screenshot requirement). However, there could still be some factors for potentional inaccuracy, double checking the data after conversion is recommended.
     </p>
 </div>
 
