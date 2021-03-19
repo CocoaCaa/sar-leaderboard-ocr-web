@@ -12,7 +12,7 @@ It turns screenshots into 64 image rows, applies a negative (inverse colour), a 
 
 ## Accuracy
 
-The output data is tested to **100%** accuracy in resolution _1:1 1920x1080 size without application bar_ (which is the **screenshot requirement**). However, there could still be some factors for potentional inaccuracy, double checking the data after conversion is recommended.
+This application is tested to **100%** accuracy in resolution _1:1 1920x1080 size without application bar_ (which is the **screenshot requirement**). However, there could still be some factors for potentional inaccuracy, double checking the data after conversion is recommended.
 
 ## Disclaimer
 
