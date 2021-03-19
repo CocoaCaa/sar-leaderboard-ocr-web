@@ -42,7 +42,7 @@
     <p>
         Using Steam's built-in screenshot feature (output without app bar) is recommended. Image size required is
         1920x1080.
-        <a href="/example-input.jpg" target="_blank">Example</a>.
+        <a href="/example-input.jpg" target="_blank">Example shown here</a>.
     </p>
     <ul class="input-list">
         {#each inputs as input, idx}
@@ -58,7 +58,7 @@
             >Start processing</button
         >
     </div>
-    <h2>How it is work?</h2>
+    <h2>How does it work?</h2>
     <p>
         It turns screenshots into 64 image rows, applies a negative (inverse colour), a threshold and a scale up to make
         the text cleaner and adds a white background to text in black. It then masks the player's name (since some names
@@ -75,7 +75,7 @@
     <h2>Accuracy</h2>
 
     <p>
-        The output data is tested to <strong>100%</strong> accuracy in resolution
+        This application is tested to <strong>100%</strong> accuracy in resolution
         <i>1:1 1920x1080 size without application bar</i> (which is the <strong>screenshot requirement</strong>).
         However, there could still be some factors for potentional inaccuracy, double checking the data after conversion
         is recommended.
